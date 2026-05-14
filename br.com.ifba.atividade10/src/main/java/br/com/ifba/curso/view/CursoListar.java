@@ -3,7 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package br.com.ifba.curso.view;
-
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
+import javax.swing.ImageIcon;
+import javax.swing.Icon;
 /**
  *
  * @author inaci
@@ -16,9 +19,27 @@ public class CursoListar extends javax.swing.JFrame {
      * Creates new form CursoListar
      */
     public CursoListar() {
-        initComponents();
-    }
+    initComponents();
 
+    jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        new Object [][] {},
+        new String [] {
+            "Nome", "Quantidade", "Descrição", "Fornecedor", "Remover", "Editar"
+        }
+    ) {
+        @Override
+        public Class getColumnClass(int columnIndex) {
+            if (columnIndex == 4 || columnIndex == 5) {
+                return Icon.class;
+            }
+            return Object.class;
+        }
+    });
+
+    jTable2.setRowHeight(32);
+
+    listarTabela();
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -37,28 +58,31 @@ public class CursoListar extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(0, 102, 153));
+        jPanel1.setBackground(new java.awt.Color(0, 55, 90));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jTextField1.setText("Procurar");
-        jTextField1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jTextField1.setBorder(null);
         jTextField1.addActionListener(this::jTextField1ActionPerformed);
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 76, -1));
+        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 100, -1));
 
-        jButton1.setBackground(new java.awt.Color(0, 102, 204));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jButton1.setBackground(new java.awt.Color(0, 50, 90));
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("+");
-        jButton1.setBorderPainted(false);
+        jButton1.setFocusPainted(false);
+        jButton1.addActionListener(this::jButton1ActionPerformed);
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 80, 30));
 
         jButton2.setBackground(new java.awt.Color(0, 102, 204));
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Homescreen\n");
         jButton2.setBorder(null);
+        jButton2.setFocusPainted(false);
         jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 100, 30));
 
-        jScrollPane1.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jTable2.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
@@ -73,6 +97,11 @@ public class CursoListar extends javax.swing.JFrame {
             }
         ));
         jTable2.setSelectionBackground(new java.awt.Color(51, 153, 255));
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable2MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -97,6 +126,79 @@ public class CursoListar extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+         DefaultTableModel modelo =
+        (DefaultTableModel) jTable2.getModel();
+
+    ImageIcon lixeira = new ImageIcon(
+        getClass().getResource("/image/lixeira.png")
+    );
+
+    ImageIcon lapis = new ImageIcon(
+        getClass().getResource("/image/lapis.png")
+    );
+
+    modelo.addRow(new Object[]{
+        "Novo Produto", 0, "Descrição", "Fornecedor", lixeira, lapis
+    });
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+         int linha = jTable2.getSelectedRow();
+
+    int coluna = jTable2.getSelectedColumn();
+
+    DefaultTableModel modelo =
+        (DefaultTableModel) jTable2.getModel();
+
+    // REMOVER
+    if(coluna == 4){
+
+        modelo.removeRow(linha);
+
+        JOptionPane.showMessageDialog(
+            this,
+            "Produto removido."
+        );
+    }
+
+    // EDITAR
+    if(coluna == 5){
+
+        JOptionPane.showMessageDialog(
+            this,
+            "Editar produto."
+        );
+    }
+    }//GEN-LAST:event_jTable2MouseClicked
+
+    public void listarTabela() {
+
+     DefaultTableModel modelo =
+        (DefaultTableModel) jTable2.getModel();
+
+    modelo.setRowCount(0);
+
+    ImageIcon lixeira = new ImageIcon(
+        getClass().getResource("/image/lixeira.png")
+    );
+
+    ImageIcon lapis = new ImageIcon(
+        getClass().getResource("/image/lapis.png")
+    );
+
+    modelo.addRow(new Object[]{
+        "Melancia", 20, "Fruta", "Empresa A", lixeira, lapis
+    });
+
+    modelo.addRow(new Object[]{
+        "Maçã", 80, "Fruta", "Empresa C", lixeira, lapis
+    });
+
+    modelo.addRow(new Object[]{
+        "Pera", 10, "Fruta", "Empresa B", lixeira, lapis
+    });
+}
     /**
      * @param args the command line arguments
      */
